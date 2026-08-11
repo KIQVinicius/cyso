@@ -14,17 +14,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<script>
+  /* Aplica o tema antes do primeiro paint — evita flash de tema errado */
+  (function () {
+    var saved = localStorage.getItem('theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
 </head>
 <body>
 
 <header class="header">
   <div class="container header__row">
     <a href="#" class="logo" aria-label="CYSÔ Marketing — início">
-      <span class="logo__mark" aria-hidden="true"></span>
-      <span class="logo__word">
-        <span class="logo__cyso">CYSÔ</span>
-        <span class="logo__tag">MARKETING</span>
-      </span>
+      <img class="logo__wordmark logo__wordmark--light" src="assets/logo/wordmark-light.png" alt="CYSÔ" />
+      <img class="logo__wordmark logo__wordmark--dark" src="assets/logo/wordmark-dark.png" alt="CYSÔ" />
+      <span class="logo__tag">MARKETING</span>
     </a>
     <nav class="nav" id="nav" aria-label="Navegação principal">
       <a href="#cenario">O cenário</a>
@@ -34,10 +40,16 @@
       <a href="#faq">FAQ</a>
       <a href="#form" class="btn btn--primary btn--sm nav__cta">Análise gratuita</a>
     </nav>
-    <a href="#form" class="btn btn--primary btn--sm nav__cta--desktop">Análise gratuita</a>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
-    </button>
+    <div class="header__actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Alternar tema claro/escuro" aria-pressed="false">
+        <svg class="icon theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        <svg class="icon theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true"><use href="#i-moon"/></svg>
+      </button>
+      <a href="#form" class="btn btn--primary btn--sm nav__cta--desktop">Análise gratuita</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -320,7 +332,7 @@
           </div>
         </div>
         <div class="compare__flow compare__flow--border">
-          <div class="compare__flowLabel compare__flowLabel--mint">CYSÔ</div>
+          <div class="compare__flowLabel compare__flowLabel--mint"><img class="compare__logo" src="assets/logo/wordmark-mint.png" alt="CYSÔ" /></div>
           <div class="compare__flowSteps compare__flowSteps--mint">
             <span>Negócio</span><span class="compare__flowArrow compare__flowArrow--mint">↓</span>
             <span>Estratégia</span><span class="compare__flowArrow compare__flowArrow--mint">↓</span>
@@ -534,11 +546,8 @@
   <div class="container footer__row footer__row--wide">
     <div class="footer__left">
       <a href="#" class="logo logo--footer" aria-label="CYSÔ Marketing">
-        <span class="logo__mark logo__mark--mint" aria-hidden="true"></span>
-        <span class="logo__word">
-          <span class="logo__cyso logo__cyso--footer">CYSÔ</span>
-          <span class="logo__tag logo__tag--footer">MARKETING</span>
-        </span>
+        <img class="logo__wordmark logo__wordmark--footer" src="assets/logo/wordmark-dark.png" alt="CYSÔ" />
+        <span class="logo__tag logo__tag--footer">MARKETING</span>
       </a>
       <div class="footer__tagline footer__tagline--inline">Estratégia • Performance • Crescimento</div>
     </div>
@@ -587,6 +596,8 @@
   <symbol id="i-at" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-4 7.5"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></symbol>
 </svg>
 
 <script src="script.js"></script>

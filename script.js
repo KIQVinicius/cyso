@@ -1,6 +1,22 @@
 (() => {
   'use strict';
 
+  /* ---------- Tema claro/escuro ---------- */
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    const root = document.documentElement;
+    const syncPressed = () => {
+      themeToggle.setAttribute('aria-pressed', String(root.getAttribute('data-theme') === 'dark'));
+    };
+    syncPressed();
+    themeToggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      syncPressed();
+    });
+  }
+
   /* ---------- Menu mobile ---------- */
   const navToggle = document.getElementById('nav-toggle');
   const nav = document.getElementById('nav');
