@@ -87,7 +87,7 @@
             <div class="metric-card__label">Investimento</div>
             <div class="metric-card__row">
               <div class="metric-card__value">R$ 15.000</div>
-              <svg class="spark spark--up" width="66" height="28" viewBox="0 0 66 28" fill="none"><polyline points="1,24 11,19 20,21 29,13 38,15 47,7 57,9 65,2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+              <svg class="spark spark--up" width="66" height="28" viewBox="0 0 66 28" fill="none"><polyline pathLength="1" points="1,24 11,19 20,21 29,13 38,15 47,7 57,9 65,2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
             </div>
           </div>
           <div class="metric-card">
@@ -106,7 +106,7 @@
           <div class="metric-card">
             <div class="metric-card__label">CPA <span class="metric-card__label--sub">(Custo por Aquisição)</span></div>
             <div class="metric-card__value" style="margin-bottom:4px">–22%</div>
-            <svg class="spark spark--down" width="100%" height="34" viewBox="0 0 200 34" preserveAspectRatio="none" fill="none"><polyline points="2,6 26,13 50,9 74,18 98,15 122,23 146,20 170,27 198,25" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+            <svg class="spark spark--down" width="100%" height="34" viewBox="0 0 200 34" preserveAspectRatio="none" fill="none"><polyline pathLength="1" points="2,6 26,13 50,9 74,18 98,15 122,23 146,20 170,27 198,25" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
           </div>
         </div>
 
@@ -117,11 +117,13 @@
           <div class="orbit__center">
             <img src="assets/logo/wordmark-dark.png" alt="" class="orbit__logo" />
           </div>
-          <div class="avatar avatar--a"><svg class="icon" aria-hidden="true"><use href="#i-person"/></svg></div>
-          <div class="avatar avatar--b"><svg class="icon" aria-hidden="true"><use href="#i-person"/></svg></div>
-          <div class="avatar avatar--c"><svg class="icon" aria-hidden="true"><use href="#i-person"/></svg></div>
-          <div class="avatar avatar--d"><svg class="icon" aria-hidden="true"><use href="#i-person"/></svg></div>
-          <div class="avatar avatar--e avatar--sm"><svg class="icon" aria-hidden="true"><use href="#i-person"/></svg></div>
+          <!-- Satélites: cada um gira sobre o raio do seu anel; o avatar
+               contra-gira para o ícone não ficar de cabeça para baixo. -->
+          <div class="orbit__sat orbit__sat--1"><span class="avatar"><svg class="icon"><use href="#i-person"/></svg></span></div>
+          <div class="orbit__sat orbit__sat--2"><span class="avatar"><svg class="icon"><use href="#i-person"/></svg></span></div>
+          <div class="orbit__sat orbit__sat--3"><span class="avatar"><svg class="icon"><use href="#i-person"/></svg></span></div>
+          <div class="orbit__sat orbit__sat--4"><span class="avatar"><svg class="icon"><use href="#i-person"/></svg></span></div>
+          <div class="orbit__sat orbit__sat--5"><span class="avatar avatar--sm"><svg class="icon"><use href="#i-person"/></svg></span></div>
         </div>
       </div>
     </div>
@@ -168,19 +170,19 @@
   <!-- Como pensamos (escuro) -->
   <section class="steps">
     <div class="container">
-      <div class="eyebrow" style="text-align:center;color:var(--brand-mint)">COMO PENSAMOS</div>
+      <div class="eyebrow eyebrow--on-dark eyebrow--center">COMO PENSAMOS</div>
       <h2 class="h2 h2--dark-center" style="margin-bottom:14px">Campanha é uma etapa. Não é o ponto de partida.</h2>
       <p style="text-align:center;font-size:13.5px;line-height:1.65;color:var(--text-on-dark-muted-2);max-width:560px;margin:0 auto 44px">Antes de qualquer anúncio no ar, entendemos o negócio, a oferta e a jornada do seu cliente. A campanha é onde a estratégia se torna visível — não onde ela começa.</p>
       <ol class="steps__track steps__track--simple">
-        <li class="steps__item"><span class="method__num method__num--dark">01</span><div class="steps__label">ESTRATÉGIA</div></li>
+        <li class="steps__item"><span class="steps__num">01</span><div class="steps__label">ESTRATÉGIA</div></li>
         <li class="steps__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-right"/></svg></li>
-        <li class="steps__item"><span class="method__num method__num--dark">02</span><div class="steps__label">CAMPANHAS</div></li>
+        <li class="steps__item"><span class="steps__num">02</span><div class="steps__label">CAMPANHAS</div></li>
         <li class="steps__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-right"/></svg></li>
-        <li class="steps__item"><span class="method__num method__num--dark">03</span><div class="steps__label">DADOS</div></li>
+        <li class="steps__item"><span class="steps__num">03</span><div class="steps__label">DADOS</div></li>
         <li class="steps__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-right"/></svg></li>
-        <li class="steps__item"><span class="method__num method__num--dark">04</span><div class="steps__label">OTIMIZAÇÃO</div></li>
+        <li class="steps__item"><span class="steps__num">04</span><div class="steps__label">OTIMIZAÇÃO</div></li>
         <li class="steps__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-right"/></svg></li>
-        <li class="steps__item steps__item--highlight"><span class="method__num method__num--dark" style="color:var(--brand-mint)">05</span><div class="steps__label">CRESCIMENTO</div></li>
+        <li class="steps__item steps__item--highlight"><span class="steps__num">05</span><div class="steps__label">CRESCIMENTO</div></li>
       </ol>
     </div>
   </section>
@@ -188,7 +190,7 @@
   <!-- Frentes de atuação -->
   <section id="servicos" class="channels">
     <div class="container">
-      <div class="eyebrow" style="text-align:center">FRENTES DE ATUAÇÃO</div>
+      <div class="eyebrow eyebrow--center">FRENTES DE ATUAÇÃO</div>
       <h2 class="h2 h2--dark-center" style="margin-bottom:36px">Cada canal cumpre um papel diferente dentro do crescimento.</h2>
       <div class="channels__grid channels__grid--6">
         <article class="channel-card">
@@ -290,7 +292,7 @@
   <section class="compare">
     <div class="container compare__grid">
       <div>
-        <div class="eyebrow" style="color:var(--text-on-dark-muted)">O QUE MUDA</div>
+        <div class="eyebrow eyebrow--on-dark">O QUE MUDA</div>
         <h2 class="h2 compare__title">A diferença não está no anúncio. Está no que vem antes e depois dele.</h2>
       </div>
       <div class="compare__flows">
@@ -346,15 +348,13 @@
   <!-- Quem está por trás -->
   <section id="sobre" class="about">
     <div class="container about__grid about__grid--founder">
-      <div class="about__photo">
-        <span class="about__photoCaption">[ FOTO DA FUNDADORA ]</span>
-      </div>
+      <img class="about__photo" src="assets/img/especialista.jpg" width="250" height="300" loading="lazy" decoding="async" alt="Retrato da fundadora da CYSÔ Marketing" />
       <div class="about__founder">
         <div class="eyebrow">QUEM ESTÁ POR TRÁS</div>
         <h2 class="h2 h2--sub">Por trás da estratégia, existe experiência de mercado.</h2>
-        <div class="about__founderName">[Nome da fundadora]</div>
+        <div class="about__founderName">Heloisa Scarano</div>
         <div class="about__founderRole">Fundadora da CYSÔ Marketing</div>
-        <p class="about__p">Com trajetória em comunicação, marketing e mídia paga, a fundadora da CYSÔ construiu a agência a partir de uma vivência prática em um dos mercados mais exigentes para se anunciar: o marketing médico — onde não há espaço para promessas vazias, apenas para estratégia, precisão e responsabilidade sobre o que se comunica.</p>
+        <p class="about__p">Com trajetória em comunicação, marketing e mídia paga, Heloisa construiu a CYSÔ a partir de uma vivência prática em um dos mercados mais exigentes para se anunciar: o marketing médico — onde não há espaço para promessas vazias, apenas para estratégia, precisão e responsabilidade sobre o que se comunica.</p>
         <p class="about__p">Essa mesma exigência guia a forma como a CYSÔ estrutura campanhas para negócios de qualquer segmento hoje: entender antes de executar, e medir antes de afirmar.</p>
         <ul class="tag-list">
           <li>Comunicação</li>
@@ -369,8 +369,10 @@
   <!-- CTA final -->
   <section class="cta">
     <div class="container cta__grid">
-      <div class="eyebrow" style="color:var(--text-on-green-muted)">ANTES DE INVESTIR MAIS EM MÍDIA</div>
-      <h2 class="h2 cta__title" style="margin-top:12px">Descubra onde estão suas maiores oportunidades de crescimento.</h2>
+      <div>
+        <div class="eyebrow eyebrow--on-dark">ANTES DE INVESTIR MAIS EM MÍDIA</div>
+        <h2 class="h2 cta__title">Descubra onde estão suas maiores oportunidades de crescimento.</h2>
+      </div>
       <p class="cta__p">Solicite uma análise inicial da sua estratégia atual e entenda, com clareza, como a CYSÔ pode contribuir para o crescimento do seu negócio.</p>
       <div class="cta__action">
         <a href="#form" class="btn btn--accent">Quero minha análise gratuita</a>
@@ -418,7 +420,7 @@
           <span class="field__error" id="err-anuncia"></span>
         </div>
 
-        <div class="field field--center">
+        <div class="field">
           <select name="investimento" id="f-investimento">
             <option value="" selected disabled>Selecione</option>
             <option>Até R$ 3 mil</option><option>R$ 3 a 10 mil</option>

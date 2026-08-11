@@ -19,6 +19,7 @@
   --brand-accent-hover: #DEE5EA;
   --brand-gold: #C8953A;
   --accent-chart: #315C63;
+  --link: #002B3D;
 
   --text-primary: #0B1D26;
   --text-body: #1F303A;
@@ -87,9 +88,10 @@
   --placeholder-fill: #1A2830;
   --avatar-fill: #1A2830;
   --avatar-fill-2: #1E2C35;
+
+  --link: #C8D1D9;
 }
 /* Componentes com cor fixa (não tokenizada) que precisam de override explícito no escuro */
-:root[data-theme="dark"] a { color: var(--brand-accent); }
 :root[data-theme="dark"] input[type="text"],
 :root[data-theme="dark"] input[type="tel"],
 :root[data-theme="dark"] select { color: var(--text-body); }
@@ -101,10 +103,14 @@
 :root[data-theme="dark"] .form-status--success { color: var(--brand-accent); }
 :root[data-theme="dark"] .channel-card__logo--generic { background: rgba(255, 255, 255, .08); color: var(--text-muted); }
 :root[data-theme="dark"] .channel-card__logo svg[fill="#000000"] { fill: var(--text-primary); }
-:root[data-theme="dark"] .about__photoCaption { background: var(--bg-card); border: 1px solid var(--border-hairline-strong); }
 :root[data-theme="dark"] .orbit__ring { border-color: rgba(255, 255, 255, .12); }
 :root[data-theme="dark"] .orbit__ring--2 { border-color: rgba(255, 255, 255, .14); }
 :root[data-theme="dark"] .orbit__ring--3 { border-color: rgba(255, 255, 255, .16); }
+/* Disco navy sobre fundo navy-preto some (~1.3:1): borda define o círculo. */
+:root[data-theme="dark"] .orbit__center {
+  border: 1px solid rgba(200, 209, 217, .28);
+  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, .8);
+}
 :root[data-theme="dark"] .dots { background-image: radial-gradient(rgba(255, 255, 255, .16) 1.1px, transparent 1.1px); }
 
 * { box-sizing: border-box; }
@@ -124,7 +130,9 @@ body {
 
 p { text-wrap: pretty; }
 
-a { color: var(--brand-navy); text-decoration: none; }
+/* Cor de link via token: mantém a regra em especificidade (0,0,1) para que
+   qualquer classe de componente (.btn, .link-arrow, .nav a) sempre vença. */
+a { color: var(--link); text-decoration: none; }
 
 section[id] { scroll-margin-top: 20px; }
 
@@ -172,6 +180,9 @@ section[id] { scroll-margin-top: 20px; }
   color: var(--text-faint);
   margin-bottom: 20px;
 }
+/* Faixas sempre escuras (steps/compare/cta) não seguem o tema: cor fixa. */
+.eyebrow--on-dark { color: var(--text-on-dark-muted); }
+.eyebrow--center { text-align: center; }
 
 /* ---- Buttons ---- */
 .btn {
@@ -186,6 +197,11 @@ section[id] { scroll-margin-top: 20px; }
 }
 .btn--primary { background: var(--brand-navy); color: #fff; font-size: 13.5px; padding: 14px 22px; }
 .btn--primary:hover { background: var(--brand-navy-hover); color: #fff; }
+/* No escuro o fundo navy quase encosta no fundo da página: o contorno devolve
+   a forma do botão sem trocar a cor da marca. inset shadow em vez de border
+   para não alterar a altura e manter os dois temas com o mesmo layout. */
+:root[data-theme="dark"] .btn--primary { box-shadow: inset 0 0 0 1px rgba(200, 209, 217, .32); }
+:root[data-theme="dark"] .btn--primary:hover { box-shadow: inset 0 0 0 1px var(--brand-accent); }
 .btn--sm { font-size: 13px; padding: 11px 20px; }
 .btn--secondary {
   background: transparent;
@@ -341,6 +357,26 @@ section[id] { scroll-margin-top: 20px; }
 .spark--up polyline { stroke: var(--accent-chart); }
 .spark--down polyline { stroke: var(--text-subtle-2); }
 
+/* ---- Gráficos: barras sobem, linhas se desenham ao entrar em tela ----
+   polyline usa pathLength="1", então dasharray/offset independem do
+   comprimento real do traçado. */
+.js-anim .bars span { transform: scaleY(0); transform-origin: bottom; }
+.js-anim .is-visible .bars span {
+  transform: scaleY(1);
+  transition: transform 620ms cubic-bezier(.22, .61, .36, 1);
+}
+.js-anim .is-visible .bars span:nth-child(1) { transition-delay: 40ms; }
+.js-anim .is-visible .bars span:nth-child(2) { transition-delay: 100ms; }
+.js-anim .is-visible .bars span:nth-child(3) { transition-delay: 160ms; }
+.js-anim .is-visible .bars span:nth-child(4) { transition-delay: 220ms; }
+.js-anim .is-visible .bars span:nth-child(5) { transition-delay: 280ms; }
+
+.js-anim .spark polyline { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.js-anim .is-visible .spark polyline {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1100ms cubic-bezier(.22, .61, .36, 1) 120ms;
+}
+
 .orbit { position: absolute; top: 4px; right: 8px; width: 352px; height: 352px; }
 .orbit__ring { position: absolute; border-radius: 50%; border: 1px solid rgba(16, 26, 20, .1); }
 .orbit__ring--1 { inset: 0; }
@@ -356,6 +392,7 @@ section[id] { scroll-margin-top: 20px; }
 .orbit__logo { width: 64px; height: auto; display: block; }
 .avatar {
   position: absolute;
+  top: calc(var(--r) * -1); left: 0;
   width: 26px; height: 26px;
   border-radius: 50%;
   background: var(--avatar-fill);
@@ -363,13 +400,30 @@ section[id] { scroll-margin-top: 20px; }
   display: flex; align-items: center; justify-content: center;
   color: var(--text-faint-3);
   font-size: 15px;
+  /* contra-rotação: cancela o giro do satélite, ícone segue em pé */
+  transform: translate(-50%, -50%);
+  animation: orbit-counter var(--dur) linear infinite;
+  animation-delay: var(--delay);
 }
-.avatar--a { top: 64px; right: 76px; }
-.avatar--b { top: 150px; right: 6px; }
-.avatar--c { bottom: 78px; right: 52px; }
-.avatar--d { bottom: 22px; left: 130px; }
-.avatar--e { top: 112px; left: 44px; }
 .avatar--sm { width: 22px; height: 22px; background: var(--avatar-fill-2); border-color: var(--border-hairline-soft); color: var(--text-faint-2); font-size: 13px; }
+
+/* Satélite = ponto no centro da órbita que gira; o avatar pendura no raio. */
+.orbit__sat {
+  position: absolute; top: 50%; left: 50%;
+  width: 0; height: 0;
+  animation: orbit-spin var(--dur) linear infinite;
+  animation-delay: var(--delay);
+}
+/* Raio casa com os anéis (176 / 132 / 88) e cada um tem período próprio,
+   senão os satélites andam em bloco e a órbita parece um carrossel. */
+.orbit__sat--1 { --r: 176px; --dur: 72s; --delay: -6s; }
+.orbit__sat--2 { --r: 176px; --dur: 72s; --delay: -33s; }
+.orbit__sat--3 { --r: 132px; --dur: 54s; --delay: -12s; }
+.orbit__sat--4 { --r: 132px; --dur: 54s; --delay: -38s; }
+.orbit__sat--5 { --r: 88px;  --dur: 40s; --delay: -22s; }
+
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+@keyframes orbit-counter { to { transform: translate(-50%, -50%) rotate(-360deg); } }
 
 /* ==========================================================================
    3. Faixa de segmentos
@@ -409,7 +463,7 @@ section[id] { scroll-margin-top: 20px; }
 }
 .problem .h2 { font-size: 31px; }
 .problem .p { max-width: 300px; }
-.problem__col { display: flex; flex-direction: column; gap: 20px; }
+.problem__col { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
 .problem__item { display: flex; align-items: flex-start; gap: 11px; }
 .problem__item .icon { color: var(--text-subtle-2); font-size: 18px; margin-top: 1px; }
 .problem__item span:last-child { font-size: 13.5px; color: var(--text-body-2); }
@@ -429,13 +483,16 @@ section[id] { scroll-margin-top: 20px; }
 .steps__desc { font-size: 11.5px; line-height: 1.6; color: var(--text-on-dark-muted-2); margin: 0; }
 .steps__item--highlight .icon--lg,
 .steps__item--highlight .steps__label { color: var(--brand-accent); }
-.steps__arrow { flex: none; margin-top: 2px; color: #45606E; display: flex; }
+.steps__arrow { flex: none; margin-top: 2px; color: #53707E; display: flex; }
 .steps__arrow .icon { font-size: 20px; }
 
 .steps__track--simple { align-items: center; }
 .steps__track--simple .steps__item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.method__num--dark { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: #E3EAEE; }
 .steps__track--simple .steps__label { margin: 0; }
+/* Classe própria: reaproveitar .method__num daria conflito de ordem no CSS
+   (ambas com especificidade 0,1,0) e o número sumia no tema claro. */
+.steps__num { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: #E3EAEE; }
+.steps__item--highlight .steps__num { color: var(--brand-accent); }
 
 /* ==========================================================================
    6. Canais
@@ -542,16 +599,11 @@ section[id] { scroll-margin-top: 20px; }
 .about__grid { display: grid; grid-template-columns: 250px minmax(0, .9fr) minmax(0, 1.5fr); gap: 40px; align-items: start; }
 .about__grid--founder { grid-template-columns: 250px minmax(0, 1fr); }
 .about__photo {
-  height: 300px; border-radius: 4px;
-  background-color: var(--placeholder-fill);
-  background-image: repeating-linear-gradient(135deg, rgba(16, 26, 20, .05) 0 7px, transparent 7px 14px);
-  display: flex; align-items: flex-end; justify-content: center;
-  padding: 14px;
-}
-.about__photoCaption {
-  font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .06em;
-  color: var(--text-subtle); background: rgba(255, 255, 255, .75);
-  padding: 5px 8px; border-radius: 3px;
+  width: 100%; height: 300px;
+  border-radius: 4px;
+  object-fit: cover; object-position: center top;
+  display: block;
+  background: var(--placeholder-fill);
 }
 .about__p { font-size: 13px; line-height: 1.7; color: var(--text-muted); margin: 0 0 16px; }
 .about__p:last-child { margin-bottom: 0; }
@@ -590,7 +642,6 @@ section[id] { scroll-margin-top: 20px; }
 
 .lead-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .field { display: flex; flex-direction: column; }
-.field--center { align-self: center; }
 .field__label { font-size: 11px; color: var(--text-faint); margin-bottom: 6px; }
 .field__error { font-size: 11px; color: var(--error); min-height: 14px; margin-top: 4px; }
 
@@ -664,11 +715,42 @@ input:focus, select:focus { border-color: var(--brand-navy); }
 .whatsapp-bubble .icon { color: #fff; font-size: 24px; }
 
 /* ==========================================================================
-   Reduced motion
+   Movimento — entrada por scroll e micro-interações
+   Só transform/opacity (compostas na GPU). O estado inicial escondido é
+   aplicado apenas com .js-anim no <html>, então sem JS nada some.
    ========================================================================== */
+.js-anim .reveal {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.js-anim .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  transition: opacity 520ms cubic-bezier(.22, .61, .36, 1),
+              transform 520ms cubic-bezier(.22, .61, .36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* Micro-interação: cartões sobem de leve no hover */
+.channel-card, .segment-card, .metric-card {
+  transition: transform 200ms cubic-bezier(.22, .61, .36, 1),
+              border-color 200ms ease;
+}
+.channel-card:hover, .segment-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-hairline-strong);
+}
+.faq__q, .nav a, .footer__colLink, .link-arrow { transition: color 160ms ease; }
+.whatsapp-bubble { transition: background-color 150ms ease, transform 200ms cubic-bezier(.22, .61, .36, 1); }
+.whatsapp-bubble:hover { transform: scale(1.06); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; animation: none !important; }
+  /* Sem movimento, tudo precisa nascer no estado final */
+  .js-anim .reveal { opacity: 1 !important; transform: none !important; }
+  .js-anim .bars span { transform: none !important; }
+  .js-anim .spark polyline { stroke-dashoffset: 0 !important; }
 }
 
 /* ==========================================================================
@@ -728,6 +810,18 @@ input:focus, select:focus { border-color: var(--brand-navy); }
   .h1 { font-size: 36px; }
   .hero { padding: 28px 0 48px; }
   .hero__actions { flex-direction: column; align-items: flex-start; gap: 16px; }
+
+  /* A composição do hero é posicionada em absoluto para a coluna larga do
+     desktop; abaixo de 900px ela colide. Aqui vira fluxo normal empilhado. */
+  .hero__art {
+    min-height: 0; margin-top: 8px;
+    display: flex; flex-direction: column; align-items: center; gap: 32px;
+  }
+  .metric-stack { position: static; width: 100%; }
+  /* relative, não static: os anéis e satélites são absolutos e precisam
+     que .orbit continue sendo o bloco de contenção deles. */
+  .orbit { position: relative; inset: auto; flex: none; }
+  .dots { display: none; }
 
   .segments-strip__list { justify-content: flex-start; }
 

@@ -1,6 +1,47 @@
 (() => {
   'use strict';
 
+  /* ---------- Entrada por scroll ----------
+     Marca o <html> só depois que o JS roda: sem JS, nada fica invisível.
+     Um único IntersectionObserver para a página toda — sem biblioteca. */
+  const REVEAL_SELECTOR = [
+    '.metric-card',
+    '.problem__item', '.problem__closing',
+    '.steps__item',
+    '.channel-card',
+    '.method__step',
+    '.compare__flow', '.compare__quote',
+    '.segment-card',
+    '.about__photo', '.about__founder',
+    '.faq__item'
+  ].join(',');
+
+  const targets = Array.from(document.querySelectorAll(REVEAL_SELECTOR));
+
+  if (targets.length && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('js-anim');
+
+    // stagger dentro de cada grupo de irmãos, não na página inteira
+    const seen = new Map();
+    targets.forEach((el) => {
+      el.classList.add('reveal');
+      const parent = el.parentElement;
+      const i = seen.get(parent) || 0;
+      seen.set(parent, i + 1);
+      el.style.setProperty('--reveal-delay', `${Math.min(i, 6) * 60}ms`);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target); // anima uma vez só
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+
+    targets.forEach((el) => observer.observe(el));
+  }
+
   /* ---------- Tema claro/escuro ---------- */
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
