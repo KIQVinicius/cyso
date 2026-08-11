@@ -73,27 +73,33 @@
   --text-muted-2: #9BA591;
   --text-subtle: #86907C;
   --text-subtle-2: #7A8470;
-  --text-faint: #6E7864;
-  --text-faint-2: #656F5B;
-  --text-faint-3: #5D6753;
+  --text-faint: #828C77;
+  --text-faint-2: #7C8670;
+  --text-faint-3: #767F6A;
 
-  --border-hairline: rgba(255, 255, 255, .09);
-  --border-hairline-soft: rgba(255, 255, 255, .07);
-  --border-hairline-strong: rgba(255, 255, 255, .14);
+  --border-hairline: rgba(255, 255, 255, .10);
+  --border-hairline-soft: rgba(255, 255, 255, .08);
+  --border-hairline-strong: rgba(255, 255, 255, .16);
 
   --chart-grid: #2B301F;
   --placeholder-fill: #262B1B;
   --avatar-fill: #262B1B;
   --avatar-fill-2: #2A2F1E;
 }
-:root[data-theme="dark"] .btn--secondary { color: var(--text-primary); }
+/* Componentes com cor fixa (não tokenizada) que precisam de override explícito no escuro */
+:root[data-theme="dark"] a { color: var(--brand-mint); }
 :root[data-theme="dark"] input[type="text"],
 :root[data-theme="dark"] input[type="tel"],
 :root[data-theme="dark"] select { color: var(--text-body); }
 :root[data-theme="dark"] select { color: var(--text-muted); }
+:root[data-theme="dark"] input::placeholder { color: var(--text-faint-2); }
 :root[data-theme="dark"] input:focus,
 :root[data-theme="dark"] select:focus { border-color: var(--brand-mint); }
+:root[data-theme="dark"] :focus-visible { outline-color: var(--brand-mint); }
+:root[data-theme="dark"] .form-status--success { color: var(--brand-mint); }
 :root[data-theme="dark"] .channel-card__logo--generic { background: rgba(255, 255, 255, .08); color: var(--text-muted); }
+:root[data-theme="dark"] .channel-card__logo svg[fill="#000000"] { fill: var(--text-primary); }
+:root[data-theme="dark"] .about__photoCaption { background: var(--bg-card); border: 1px solid var(--border-hairline-strong); }
 :root[data-theme="dark"] .orbit__ring { border-color: rgba(255, 255, 255, .12); }
 :root[data-theme="dark"] .orbit__ring--2 { border-color: rgba(255, 255, 255, .14); }
 :root[data-theme="dark"] .orbit__ring--3 { border-color: rgba(255, 255, 255, .16); }
@@ -181,8 +187,8 @@ section[id] { scroll-margin-top: 20px; }
 .btn--sm { font-size: 13px; padding: 11px 20px; }
 .btn--secondary {
   background: transparent;
-  border: 1px solid rgba(16, 26, 20, .22);
-  color: #1C2A22;
+  border: 1px solid var(--border-hairline-strong);
+  color: var(--text-primary);
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 13px;
@@ -202,12 +208,13 @@ section[id] { scroll-margin-top: 20px; }
 
 .link-arrow {
   font-size: 13.5px;
-  color: #3B4A41;
+  color: var(--text-body);
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 .link-arrow:hover { color: var(--brand-green); }
+:root[data-theme="dark"] .link-arrow:hover { color: var(--brand-mint); }
 
 .tag-list {
   list-style: none; margin: 18px 0 0; padding: 0;
@@ -241,8 +248,9 @@ section[id] { scroll-margin-top: 20px; }
 .logo__tag--footer { color: #93A09A; }
 
 .nav { display: flex; align-items: center; gap: 38px; }
-.nav a { font-size: 13.5px; color: #3B4A41; }
+.nav a { font-size: 13.5px; color: var(--text-body); }
 .nav a:hover { color: var(--brand-green); }
+:root[data-theme="dark"] .nav a:hover { color: var(--brand-mint); }
 .nav__cta { display: none; }
 
 .header__actions { display: flex; align-items: center; gap: 14px; }
@@ -344,9 +352,9 @@ section[id] { scroll-margin-top: 20px; }
   width: 26px; height: 26px;
   border-radius: 50%;
   background: var(--avatar-fill);
-  border: 1px solid rgba(16, 26, 20, .08);
+  border: 1px solid var(--border-hairline);
   display: flex; align-items: center; justify-content: center;
-  color: #9AA39C;
+  color: var(--text-faint-3);
   font-size: 15px;
 }
 .avatar--a { top: 64px; right: 76px; }
@@ -354,7 +362,7 @@ section[id] { scroll-margin-top: 20px; }
 .avatar--c { bottom: 78px; right: 52px; }
 .avatar--d { bottom: 22px; left: 130px; }
 .avatar--e { top: 112px; left: 44px; }
-.avatar--sm { width: 22px; height: 22px; background: var(--avatar-fill-2); border-color: rgba(16, 26, 20, .07); color: #A7AFA8; font-size: 13px; }
+.avatar--sm { width: 22px; height: 22px; background: var(--avatar-fill-2); border-color: var(--border-hairline-soft); color: var(--text-faint-2); font-size: 13px; }
 
 /* ==========================================================================
    3. Faixa de segmentos
@@ -370,7 +378,7 @@ section[id] { scroll-margin-top: 20px; }
   font-family: var(--font-display);
   font-size: 14.5px;
   font-weight: 500;
-  color: #1C2A22;
+  color: var(--text-primary);
   margin: 0 0 22px;
 }
 .segments-strip__list {
@@ -380,8 +388,8 @@ section[id] { scroll-margin-top: 20px; }
   gap: 18px; flex-wrap: wrap;
 }
 .segments-strip__list li { display: flex; align-items: center; gap: 8px; }
-.segments-strip__list .icon { color: #5F6D64; font-size: 18px; }
-.segments-strip__list span:last-child { font-size: 12.5px; color: #48564D; }
+.segments-strip__list .icon { color: var(--text-subtle-2); font-size: 18px; }
+.segments-strip__list span:last-child { font-size: 12.5px; color: var(--text-body-2); }
 
 /* ==========================================================================
    4. O problema
@@ -486,7 +494,7 @@ section[id] { scroll-margin-top: 20px; }
 .panel__title { font-size: 12px; color: var(--text-muted-2); margin-bottom: 14px; }
 .panel__stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
 .panel__stats--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 14px; }
-.stat { border: 1px solid rgba(16, 26, 20, .08); border-radius: 7px; padding: 8px 10px; }
+.stat { border: 1px solid var(--border-hairline); border-radius: 7px; padding: 8px 10px; }
 .stat__label { font-size: 9.5px; color: var(--text-faint-2); margin-bottom: 5px; }
 .stat__value { font-family: var(--font-display); font-size: 13px; font-weight: 600; }
 .panel__chart { display: block; margin-bottom: 14px; }
@@ -531,7 +539,7 @@ section[id] { scroll-margin-top: 20px; }
   border-radius: 9px;
   padding: 16px;
 }
-.segment-card .icon { color: #5F6D64; font-size: 20px; margin-bottom: 10px; }
+.segment-card .icon { color: var(--text-subtle-2); font-size: 20px; margin-bottom: 10px; }
 .segment-card h3 { font-family: var(--font-display); font-size: 13.5px; font-weight: 600; margin: 0 0 6px; color: var(--text-primary); }
 .segment-card p { font-size: 12px; line-height: 1.55; color: var(--text-muted-2); margin: 0; }
 
