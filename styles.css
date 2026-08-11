@@ -59,6 +59,10 @@
   --font-body: 'DM Sans', system-ui, sans-serif;
 
   --container-w: 1240px;
+
+  /* espaço reservado sob cada campo para a mensagem de erro */
+  --field-error-h: 14px;
+  --field-error-gap: 4px;
 }
 
 /* Tema escuro — sobrescreve só as superfícies/texto "claros" da página.
@@ -643,7 +647,7 @@ section[id] { scroll-margin-top: 20px; }
 .lead-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .field { display: flex; flex-direction: column; }
 .field__label { font-size: 11px; color: var(--text-faint); margin-bottom: 6px; }
-.field__error { font-size: 11px; color: var(--error); min-height: 14px; margin-top: 4px; }
+.field__error { font-size: 11px; color: var(--error); min-height: var(--field-error-h); margin-top: var(--field-error-gap); }
 
 input[type="text"], input[type="tel"], select {
   font-family: var(--font-body);
@@ -663,7 +667,14 @@ input:focus, select:focus { border-color: var(--brand-navy); }
 :focus-visible { outline: 2px solid var(--brand-navy); outline-offset: 2px; }
 .field.has-error input, .field.has-error select { border-color: var(--error); }
 
-.submit-btn { grid-column: span 1; align-self: flex-end; height: 44px; font-size: 13px; padding: 0 18px; }
+/* A linha do grid termina abaixo do espaço reservado para a mensagem de erro
+   do campo vizinho. Sem esse recuo o botão fica mais baixo que o input. */
+.submit-btn {
+  grid-column: span 1;
+  align-self: end;
+  margin-bottom: calc(var(--field-error-h) + var(--field-error-gap));
+  height: 44px; font-size: 13px; padding: 0 18px;
+}
 .submit-btn[disabled] { opacity: .7; cursor: not-allowed; }
 .form-status { grid-column: 1 / -1; font-size: 12.5px; margin: 0; color: var(--text-muted-2); }
 .form-status--error { color: var(--error); }
@@ -842,7 +853,8 @@ input:focus, select:focus { border-color: var(--brand-navy); }
   .about .about__photo { width: 100%; max-width: 250px; }
 
   .lead-form { grid-template-columns: 1fr; }
-  .submit-btn { align-self: stretch; }
+  /* coluna única: não há campo ao lado para alinhar, o recuo vira sobra */
+  .submit-btn { align-self: stretch; margin-bottom: 0; }
 
   .footer__row { flex-direction: column; align-items: flex-start; text-align: left; }
   .footer__legal { text-align: left; }
