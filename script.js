@@ -1,0 +1,135 @@
+(() => {
+  'use strict';
+
+  /* ---------- Menu mobile ---------- */
+  const navToggle = document.getElementById('nav-toggle');
+  const nav = document.getElementById('nav');
+  if (navToggle && nav) {
+    navToggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    nav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  /* ---------- FAQ acordeão: um aberto por vez ---------- */
+  const faqItems = Array.from(document.querySelectorAll('.faq__item'));
+  faqItems.forEach((item) => {
+    const btn = item.querySelector('.faq__q');
+    const answer = item.querySelector('.faq__a');
+    const icon = btn.querySelector('.faq__icon use');
+
+    btn.addEventListener('click', () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+      faqItems.forEach((other) => {
+        if (other === item) return;
+        other.querySelector('.faq__q').setAttribute('aria-expanded', 'false');
+        other.querySelector('.faq__a').hidden = true;
+        other.querySelector('.faq__icon use').setAttribute('href', '#i-plus');
+      });
+
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      answer.hidden = isOpen;
+      icon.setAttribute('href', isOpen ? '#i-plus' : '#i-minus');
+    });
+  });
+
+  /* ---------- WhatsApp — máscara (00) 00000-0000 ---------- */
+  const whatsappInput = document.getElementById('f-whatsapp');
+  function maskPhone(value) {
+    const digits = value.replace(/\D/g, '').slice(0, 11);
+    if (digits.length <= 2) return digits.replace(/^(\d*)/, '($1');
+    if (digits.length <= 7) return digits.replace(/^(\d{2})(\d*)/, '($1) $2');
+    return digits.replace(/^(\d{2})(\d{5})(\d*)/, '($1) $2-$3');
+  }
+  whatsappInput.addEventListener('input', (e) => {
+    e.target.value = maskPhone(e.target.value);
+  });
+
+  /* ---------- Validação + envio ---------- */
+  const form = document.getElementById('lead-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const submitLabel = submitBtn.querySelector('.submit-btn__label');
+  const statusEl = document.getElementById('form-status');
+
+  function setError(field, message) {
+    const wrapper = document.getElementById(`f-${field}`)?.closest('.field')
+      || document.querySelector(`[name="${field}"]`)?.closest('.field');
+    const errorEl = document.getElementById(`err-${field}`);
+    if (wrapper) wrapper.classList.toggle('has-error', Boolean(message));
+    if (errorEl) errorEl.textContent = message || '';
+  }
+
+  function validate(data) {
+    const errors = {};
+
+    if (!data.nome || data.nome.trim().length < 2) {
+      errors.nome = 'Informe seu nome (mín. 2 caracteres).';
+    }
+    if (!data.empresa || !data.empresa.trim()) {
+      errors.empresa = 'Informe o nome da empresa.';
+    }
+    if (!data.segmento) {
+      errors.segmento = 'Selecione um segmento.';
+    }
+    if (!data.anuncia) {
+      errors.anuncia = 'Selecione uma opção.';
+    }
+    if (!data.investimento) {
+      errors.investimento = 'Selecione uma faixa de investimento.';
+    }
+    const phoneDigits = (data.whatsapp || '').replace(/\D/g, '');
+    if (phoneDigits.length < 10 || phoneDigits.length > 11) {
+      errors.whatsapp = 'Informe um WhatsApp válido com DDD.';
+    }
+
+    return errors;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    ['nome', 'empresa', 'segmento', 'anuncia', 'investimento', 'whatsapp'].forEach((f) => setError(f, ''));
+
+    const errors = validate(data);
+    const hasErrors = Object.keys(errors).length > 0;
+    Object.entries(errors).forEach(([field, message]) => setError(field, message));
+
+    if (hasErrors) {
+      statusEl.textContent = 'Verifique os campos destacados.';
+      statusEl.className = 'form-status form-status--error';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitLabel.textContent = 'Enviando...';
+    statusEl.textContent = '';
+    statusEl.className = 'form-status';
+
+    try {
+      // ponytail: endpoint do CRM ainda não definido (Supabase / HubSpot / RD Station).
+      // Troque por um POST real quando o cliente definir o destino do lead.
+      await new Promise((resolve) => setTimeout(resolve, 900));
+
+      form.hidden = true;
+      statusEl.textContent = 'Recebemos seus dados! Nosso time entra em contato em até 1 dia útil.';
+      statusEl.className = 'form-status form-status--success';
+      statusEl.parentElement.insertBefore(statusEl, form);
+    } catch (err) {
+      statusEl.textContent = 'Não foi possível enviar agora. Tente novamente em instantes.';
+      statusEl.className = 'form-status form-status--error';
+    } finally {
+      submitBtn.disabled = false;
+      submitLabel.textContent = 'Solicitar análise';
+    }
+  });
+})();
