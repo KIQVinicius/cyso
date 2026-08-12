@@ -111,8 +111,6 @@
 
   /* ---------- Validação + envio ---------- */
   const form = document.getElementById('lead-form');
-  const submitBtn = document.getElementById('submit-btn');
-  const submitLabel = submitBtn.querySelector('.submit-btn__label');
   const statusEl = document.getElementById('form-status');
 
   function setError(field, message) {
@@ -149,7 +147,26 @@
     return errors;
   }
 
-  form.addEventListener('submit', async (e) => {
+  const WHATSAPP_NUMBER = '5511996105430';
+
+  function buildWhatsappMessage(data) {
+    const linhas = [
+      'Olá, CYSÔ! Quero solicitar a análise gratuita.',
+      '',
+      `*Nome:* ${data.nome.trim()}`,
+      `*Empresa:* ${data.empresa.trim()}`,
+      `*Segmento:* ${data.segmento}`,
+      `*Tráfego pago:* ${data.anuncia === 'sim' ? 'Já invisto' : 'Ainda não invisto'}`,
+      `*Investimento:* ${data.investimento}`,
+      `*WhatsApp:* ${data.whatsapp}`
+    ];
+    if (data.contato && data.contato.trim()) {
+      linhas.splice(5, 0, `*Site/Instagram:* ${data.contato.trim()}`);
+    }
+    return linhas.join('\n');
+  }
+
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const formData = new FormData(form);
@@ -167,26 +184,13 @@
       return;
     }
 
-    submitBtn.disabled = true;
-    submitLabel.textContent = 'Enviando...';
-    statusEl.textContent = '';
-    statusEl.className = 'form-status';
+    // Abre síncrono, dentro do gesto do usuário — depois de um await o navegador bloqueia o popup.
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildWhatsappMessage(data))}`;
+    window.open(url, '_blank', 'noopener');
 
-    try {
-      // ponytail: endpoint do CRM ainda não definido (Supabase / HubSpot / RD Station).
-      // Troque por um POST real quando o cliente definir o destino do lead.
-      await new Promise((resolve) => setTimeout(resolve, 900));
-
-      form.hidden = true;
-      statusEl.textContent = 'Recebemos seus dados! Nosso time entra em contato em até 1 dia útil.';
-      statusEl.className = 'form-status form-status--success';
-      statusEl.parentElement.insertBefore(statusEl, form);
-    } catch (err) {
-      statusEl.textContent = 'Não foi possível enviar agora. Tente novamente em instantes.';
-      statusEl.className = 'form-status form-status--error';
-    } finally {
-      submitBtn.disabled = false;
-      submitLabel.textContent = 'Solicitar análise';
-    }
+    form.hidden = true;
+    statusEl.innerHTML = `Abrimos o WhatsApp com suas respostas — é só enviar. Não abriu? <a href="${url}" target="_blank" rel="noopener">Clique aqui</a>.`;
+    statusEl.className = 'form-status form-status--success';
+    statusEl.parentElement.insertBefore(statusEl, form);
   });
 })();

@@ -674,7 +674,9 @@ input:focus, select:focus { border-color: var(--brand-navy); }
   align-self: end;
   margin-bottom: calc(var(--field-error-h) + var(--field-error-gap));
   height: 44px; font-size: 13px; padding: 0 18px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
 }
+.submit-btn .icon { font-size: 17px; }
 .submit-btn[disabled] { opacity: .7; cursor: not-allowed; }
 .form-status { grid-column: 1 / -1; font-size: 12.5px; margin: 0; color: var(--text-muted-2); }
 .form-status--error { color: var(--error); }
